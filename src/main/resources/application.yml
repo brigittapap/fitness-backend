@@ -19,3 +19,9 @@ logging:
 app:
   jwtSecret: "VlRxNq6mNgKx8GNzzJ9MBsVUHjqO8tBQ3fvmayorufqaviI7blarZ+14WlwUSHT7"
   jwtTtlMinutes: 43200
+
+strava:
+  clientId: "YOUR_STRAVA_CLIENT_ID"
+  clientSecret: "YOUR_STRAVA_CLIENT_SECRET"
+  redirectUri: "http://localhost:8080/api/v1/oauth/strava/callback"
+  scope: "read,activity:read_all"

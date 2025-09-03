@@ -1,12 +1,13 @@
 CREATE TABLE auth_providers (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
   user_id BIGINT NOT NULL,
-  provider ENUM('STRAVA') NOT NULL,
+  provider VARCHAR(32) NOT NULL,
   access_token TEXT NOT NULL,
   refresh_token TEXT NOT NULL,
   expires_at DATETIME NOT NULL,
   UNIQUE KEY uq_user_provider (user_id, provider),
-  CONSTRAINT fk_ap_user FOREIGN KEY (user_id) REFERENCES users(id)
+  CONSTRAINT fk_ap_user FOREIGN KEY (user_id) REFERENCES users(id),
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE activities (

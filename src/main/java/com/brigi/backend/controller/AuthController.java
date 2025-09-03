@@ -1,4 +1,4 @@
-package com.brigi.backend.web;
+package com.brigi.backend.controller;
 
 import com.brigi.backend.domain.User;
 import com.brigi.backend.repo.UserRepo;
@@ -27,7 +27,7 @@ public class AuthController {
     if (users.existsByEmail(s.email())) throw new ResponseStatusException(HttpStatus.CONFLICT, "email exists");
     users.save(new User(s.email(), enc.encode(s.password())));
   }
-
+  
   @PostMapping("/login")
   public Map<String,String> login(@RequestBody @Valid Login l){
     var u = users.findByEmail(l.email()).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
