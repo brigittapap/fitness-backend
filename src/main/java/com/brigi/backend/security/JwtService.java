@@ -24,8 +24,8 @@ public class JwtService {
   public String issue(Long userId, String email){
     var now = Instant.now();
     return Jwts.builder()
-      .setSubject(String.valueOf(userId))
-      .claim("email", email)
+      .setSubject(email)
+      .claim("userId", userId)
       .setIssuedAt(Date.from(now))
       .setExpiration(Date.from(now.plus(ttlMinutes, ChronoUnit.MINUTES)))
       .signWith(Keys.hmacShaKeyFor(key), SignatureAlgorithm.HS256)

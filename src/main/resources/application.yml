@@ -15,6 +15,12 @@ spring:
 logging:
   level:
     org.flywaydb: INFO
+    org.springframework.security: DEBUG
+    com.brigi.backend.security: DEBUG # Add your security package
+    org.springframework.web: DEBUG # Add web debugging
+    org.springframework.security.web.FilterChainProxy: DEBUG # Add filter chain debugging
+    com.brigi.backend: DEBUG # Add this line to enable debug for your package
+    com.brigi.backend.controller: DEBUG # Specific for controllers
 
 app:
   jwtSecret: "VlRxNq6mNgKx8GNzzJ9MBsVUHjqO8tBQ3fvmayorufqaviI7blarZ+14WlwUSHT7"

@@ -9,10 +9,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
   private final JwtService jwt;
@@ -21,14 +23,30 @@ public class JwtAuthFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
       throws ServletException, IOException {
-    String h = req.getHeader("Authorization");
-    if (h != null && h.startsWith("Bearer ")) {
+    String authHeader = req.getHeader("Authorization");
+
+    if (authHeader != null && authHeader.startsWith("Bearer ")) {
       try {
-        Claims claims = jwt.parse(h.substring(7)).getBody();
-        var uid = claims.getSubject();
-        var auth = new UsernamePasswordAuthenticationToken(uid, null, List.of());
-        SecurityContextHolder.getContext().setAuthentication(auth);
-      } catch (Exception ignored) { }
+        String token = authHeader.substring(7);
+        Claims claims = jwt.parse(token).getBody();
+        String email = claims.getSubject();
+
+        
+      if (email != null && !email.trim().isEmpty()) {
+                    var auth = new UsernamePasswordAuthenticationToken(
+                        email, 
+                        null, 
+                        List.of()  // Consider adding proper authorities here
+                    );
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                    log.debug("Successfully authenticated user: {}", email);
+                } else {
+                    log.warn("JWT token has no subject (email)");
+                }
+      } catch (Exception ignored) { 
+          log.error("Failed to process JWT token", ignored);
+          SecurityContextHolder.clearContext();
+      }
     }
     chain.doFilter(req, res);
   }
